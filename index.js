@@ -43,7 +43,7 @@ app.use((err,req, res, next) => {
 
 
 db.sequelize.sync().then(() => {
-  const port = 4005;
+  const port = 4007;
   app.listen(port, () => {
     console.log("Server listening on " + port);
   });
