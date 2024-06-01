@@ -38,7 +38,18 @@ module.exports = (sequelize, DataTypes) => {
     tokenExpire: {
       type: DataTypes.DATE
     }
-  })
+  },
+  {
+    timestamps: true,
+    createdAt: 'created_at',
+    updatedAt: 'updated_at',
+  }
+)
+
+Users.associate = (models) => {
+  Users.hasMany(models.Surveys, { foreignKey: 'userId' });
+  Users.hasMany(models.Responses, { foreignKey: 'userId' });
+};
 
   return Users
 }
