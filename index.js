@@ -21,12 +21,22 @@ const db = require("./models");
 //routers
 const authRouter = require("./routes/UserAuth.route")
 const userRouter = require("./routes/User.route")
+const surveyRouter = require("./routes/Survey.route")
+const questionRouter = require("./routes/Question.route")
+const optionRouter = require("./routes/Option.route")
+const responseRouter = require("./routes/Response.route")
+const answerRouter = require("./routes/Answer.route")
 
 
 
 //endpoint routes
 app.use("/auth", authRouter)
 app.use("/users", userRouter)
+app.use("/survey", surveyRouter)
+app.use("/questions", questionRouter)
+app.use("/option", optionRouter)
+app.use("/response", responseRouter)
+app.use("/answer", answerRouter)
 
 
 //middleware to handle errors
