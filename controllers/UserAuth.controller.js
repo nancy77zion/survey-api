@@ -79,7 +79,7 @@ const login = async (req, res, next) => {
         .cookie("access_token", accessToken, {
           httpOnly: true, // Cookie cannot be accessed via client-side scripts
           secure: process.env.NODE_ENV === 'production', // Use secure cookies in production
-          sameSite: 'none', // CSRF protection
+          sameSite: 'None', // CSRF protection
           maxAge: 24 * 60 * 60 * 1000, // Cookie expires in 24 hours (optional)
         })
         .status(200)
