@@ -4,6 +4,7 @@ const { Users } = require("../models");
 const { sign } = require("jsonwebtoken");
 const crypto = require('crypto');
 const errorHandler = require("../middlewares/error")
+const { sendConfirmationEmail} = require("../utils/mail.utils")
 
 
 // Register function
@@ -12,8 +13,16 @@ const register = async (req, res , next) => {
   try {
     const { firstname, lastname, email, phoneNumber, password, confirmPassword } = req.body;
 
+
+    if (password !== confirmPassword) {
+      return res.status(400).json({
+          success: false,
+          message: "Passwords do not match"
+      });
+  }
+
     const hashedPassword = await bcrypt.hash(password, 10)
-    //const hashedPassword2 = await bcrypt.hash(confirmPassword, 10)
+  
 
      // Generate unique token for password reset using crypto
      const confirmationToken = crypto.randomBytes(20).toString("hex");
@@ -33,9 +42,12 @@ const register = async (req, res , next) => {
       tokenExpire: confirmationTokenExpire
     });
 
+    await sendConfirmationEmail(email, req.headers.host, user.userId, confirmationToken); 
+
     res.status(200).json({
       success: true,
       result: user,
+      message: "Welcome register successfully"
   });
   //res.send(" Welcome register successfully");
     
@@ -72,7 +84,7 @@ const login = async (req, res, next) => {
         process.env.JWT_TOKEN
       ); //using the id of the user to generate web token
 
-      const { password: pass, confirmPassword: confirm, ...restInfo } = userQuery._previousDataValues;
+      const { password: pass, ...restInfo } = userQuery._previousDataValues;
 
       // Set the access token as a cookie
       res

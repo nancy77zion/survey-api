@@ -11,7 +11,7 @@ const getUser = async (req, res, next) => {
     }
 
     //removed password before sending back data to client
-    const { password: pass, comfirmPassword: comfirm, ...rest } = user._previousDataValues;
+    const { password: pass, confirmPassword: comfirm, ...rest } = user._previousDataValues;
   
     res.status(200).json({
       data: rest,

@@ -5,7 +5,7 @@ const { Surveys, Questions, Responses } = require('../models');
 const createSurvey = async (req, res) => {
   try {
     const newSurvey = await Surveys.create(req.body);
-    const surveyLink = `${req.protocol}://${req.get('host')}/formpage/${newSurvey.surveyId}`;
+    const surveyLink = `${req.protocol}://${req.get('host')}/formpage/${newSurvey.surveyId}`; 
     res.status(201).json({ survey: newSurvey, link: surveyLink });
   } catch (error) {
     res.status(500).json({ error: error.message });

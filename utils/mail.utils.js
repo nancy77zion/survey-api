@@ -13,7 +13,7 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-exports.forgotPasswordMail = async (userEmail, host, token) => {
+exports.forgotPasswordMail = async (userEmail, id,host, token) => {
     try {
         const mailOptions = {
             from: 'conclasesurvey.app@gmail.com', // need a different mail address
@@ -21,7 +21,7 @@ exports.forgotPasswordMail = async (userEmail, host, token) => {
             subject: 'Password Reset',
             text: `You are receiving this email because you (or someone else) have requested the reset of the password for your account.\n\n`
                 + `Please click on the following link, or paste this into your browser to complete the process:\n\n`
-                + `http://${host}/reset-password/${token}\n\n`
+                + `http://${host}/reset-password/${id}/${token}\n\n`
                 + `If you did not request this, please ignore this email and your password will remain unchanged.\n`
         };
 
