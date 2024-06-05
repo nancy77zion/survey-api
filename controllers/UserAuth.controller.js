@@ -4,7 +4,7 @@ const { Users } = require("../models");
 const { sign } = require("jsonwebtoken");
 const crypto = require('crypto');
 const errorHandler = require("../middlewares/error")
-const { sendConfirmationEmail} = require("../utils/mail.utils")
+const { sendConfirmationEmail, forgotPasswordMail} = require("../utils/mail.utils")
 
 
 // Register function
@@ -37,19 +37,20 @@ const register = async (req, res , next) => {
       email,
       phoneNumber,
       password: hashedPassword,
-      confirmPassword,
       token: confirmationToken,
       tokenExpire: confirmationTokenExpire
     });
-
-    await sendConfirmationEmail(email, req.headers.host, user.userId, confirmationToken); 
 
     res.status(200).json({
       success: true,
       result: user,
       message: "Welcome register successfully"
   });
-  //res.send(" Welcome register successfully");
+  
+  console.log('Sending confirmation email...');
+    await sendConfirmationEmail(email, req.headers.host, user.userId, confirmationToken); 
+    console.log('Confirmation email sent successfully');
+
     
   } catch (error) {
     next(error);
@@ -142,7 +143,7 @@ const forgotPassword = async (req, res, next) => {
    });
 
    // Send password reset email with token
-   await forgotPassword(email, req.headers.host, resetToken)
+   await forgotPasswordMail(email, req.headers.host, resetToken)
 
    //
    res.status(200).json({

@@ -4,19 +4,43 @@ dotenv.config();
 const nodemailer = require('nodemailer');
 
 
+// const transporter = nodemailer.createTransport({
+//   host: "sandbox.smtp.mailtrap.io",
+//   port: 2525,
+//   auth: {
+//     user: process.env.MAIL_USER,
+//     pass: process.env.MAIL_PASSWORD
+//   },
+// });
+
+
 const transporter = nodemailer.createTransport({
-  host: "sandbox.smtp.mailtrap.io",  // need to create your own mail host , used my own mailstrap account
-  port: 2525,
-  auth: {
-    user: process.env.MAIL_USER,
-    pass: process.env.MAIL_PASSWORD
-  },
+    service: "gmail",
+    host: "smtp.gmail.com", 
+    port: 587,
+    secure: false,
+    auth: {
+      user: process.env.MAIL_USER,
+      pass: process.env.MAIL_PASSWORD
+    },
+  });
+
+  //verification step to confirm the configuration:
+  transporter.verify((error, success) => {
+    if (error) {
+        console.error('Transporter configuration error:', error);
+    } else {
+        console.log('Transporter is configured correctly:', success);
+    }
 });
 
 exports.forgotPasswordMail = async (userEmail, id,host, token) => {
     try {
         const mailOptions = {
-            from: 'conclasesurvey.app@gmail.com', // need a different mail address
+            from: {
+                name: "conclase survey",
+                address: process.env.MAIL_USER
+            },
             to: userEmail,
             subject: 'Password Reset',
             text: `You are receiving this email because you (or someone else) have requested the reset of the password for your account.\n\n`
@@ -37,7 +61,10 @@ exports.forgotPasswordMail = async (userEmail, id,host, token) => {
 exports.sendConfirmationEmail = async (userEmail, host, confirmationToken) => {
     try {
         const mailOptions = {
-            from: "conclasesurvey.app@gmail.com",
+            from: {
+                name: "Conclase survey",
+                address: process.env.MAIL_USER
+            },
             to: userEmail,
             subject: "Confirm Your Account",
             html: `
